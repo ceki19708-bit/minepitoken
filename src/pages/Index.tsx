@@ -362,7 +362,12 @@ const Index = () => {
                   className="h-6 w-6 object-cover rounded-full"
                 />
               </div>
-              
+               {/* Close button */}
+              <button onClick={() => setIsPopupOpen(false)} className="text-white hover:text-purple-200 transition-colors w-8 h-8 flex items-center justify-center">
+                <span className="text-xl font-light"></span>
+              </button>
+            </div>
+          </div>
              
           
           {/* Main Content - Centered Layout */}
