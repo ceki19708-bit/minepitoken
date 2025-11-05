@@ -363,12 +363,7 @@ const Index = () => {
                 />
               </div>
               
-              {/* Close button */}
-              <button onClick={() => setIsPopupOpen(false)} className="text-white hover:text-purple-200 transition-colors w-8 h-8 flex items-center justify-center">
-                <span className="text-xl font-light">×</span>
-              </button>
-            </div>
-          </div>
+             
           
           {/* Main Content - Centered Layout */}
           <div className="flex-1 flex flex-col justify-center px-6 py-12">
